@@ -2,10 +2,7 @@ package org.example;
 
 import java.sql.Array;
 import java.sql.SQLOutput;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.Locale;
-import java.util.Scanner;
+import java.util.*;
 
 public class App {
 private static Locale swedishLocale = new Locale("sv", "SE");
@@ -93,18 +90,20 @@ private static Locale swedishLocale = new Locale("sv", "SE");
     }
 
     public static void sortArray (int [] input) {
-        Integer[] integerArray = new Integer[input.length]; // Create an array of Integer objects with the same length
+        TimeAndPrice[] timePrices = new TimeAndPrice [input.length];// Create an array of Integer objects with the same length
 
         for (int i = 0; i < input.length; i++) {
-            integerArray[i] = Integer.valueOf(input[i]); // Convert each int to Integer
+            timePrices[i] = new TimeAndPrice (i, input[i]); // Convert each int to Integer
         }
-        Arrays.sort(integerArray, Collections.reverseOrder());
+        Arrays.sort(timePrices, Comparator.comparingInt(TimeAndPrice::getPrice).reversed());
 
-        for (int i = 0; i < input.length; i++) {
-            String formattedI = (i < 10) ? "0" + (i) : String.valueOf(i);
-            String formattedNextI = ((i + 1) < 10) ? "0" + (i + 1) : String.valueOf(i + 1);
+        for (int i = 0; i < timePrices.length; i++) {
+            TimeAndPrice t = timePrices [i];
+            int pos = t.getTime();
+            String formattedI = (pos < 10) ? "0" + (pos) : String.valueOf(pos);
+            String formattedNextI = ((pos + 1) < 10) ? "0" + (pos + 1) : String.valueOf(pos + 1);
 
-            System.out.printf(formattedI + "-" + formattedNextI + " " + integerArray[i] + " öre\n");
+            System.out.printf(formattedI + "-" + formattedNextI + " " + t.getPrice() + " öre\n");
         }
     }
 
@@ -123,5 +122,19 @@ private static Locale swedishLocale = new Locale("sv", "SE");
         //find the 4 cheapets consecutive hours in a row for 24 hours, the program should tell when
         //u should start charge the car to
     }
+static class TimeAndPrice{
+        private int time;
+        private int price;
 
+        public TimeAndPrice(int time, int price){
+            this.time = time;
+            this.price = price;
+        }
+        public int getTime(){
+            return time;
+        }
+        public int getPrice(){
+            return price;
+        }
+}
 }

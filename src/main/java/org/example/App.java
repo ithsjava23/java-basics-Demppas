@@ -8,11 +8,10 @@ import java.util.Locale;
 import java.util.Scanner;
 
 public class App {
-
+private static Locale swedishLocale = new Locale("sv", "SE");
 
     public static void main(String[] args) {
-        Locale swedishLocale = new Locale("sv", "SE");
-        Locale.setDefault(swedishLocale);
+        java.util.Locale.setDefault(swedishLocale);
 
         Scanner scanner = new Scanner(System.in);
         int [] pricesFromUser = new int[24];
@@ -27,6 +26,7 @@ public class App {
                 4. Bästa Laddningstid (4h)
                 e. Avsluta
                 """;
+
         do {
             System.out.print(menu);
             userChoice = scanner.nextLine();
@@ -42,7 +42,7 @@ public class App {
                     sortArray(pricesFromUser);
                     break;
                 case "4":
-                    bestTime(pricesFromUser);
+                    bestTimeToCharge(pricesFromUser);
                     break;
             }
         } while (!userChoice.equalsIgnoreCase("e"));
@@ -59,25 +59,39 @@ public class App {
 
     }
     public static void minMax (int [] input) {
-        int sum = 0;
+        float sum = 0;
         int min = 0;
         int max = 0;
+        String min2 ="";
+        String max2 ="";
 
-        for (int i = 0; i < input.length; i++){
+        for (int i = 0; i < input.length; i++){         //calculate avg, min and max value
             int val = input [i];
             sum += val;
-            if (i == 0 || val < min)
+            if (i == 0 || val < min) {
                 min = val;
-            if (i == 0 || val > max)
+                min2 = timeAndPrice(i, val);
+            }
+            if (i == 0 || val > max) {
                 max = val;
+                max2 = timeAndPrice(i, val);
+            }
         }
             float average = sum / input.length;
             //räkna ut min, max medel.
-        System.out.printf("Lägsta pris: "+ min +" öre/kWh\n");
-        System.out.printf("Högsta pris: "+ max +" öre kWh \n");
-        System.out.printf("Medelpris: " + average + " öre/kWh");
-
+        System.out.printf("Lägsta pris: "+ min2 +" öre/kWh\n");
+        System.out.printf("Högsta pris: "+ max2 +" öre/kWh\n");
+        System.out.printf("Medelpris: " + String.format(swedishLocale,"%.2f", average) + " öre/kWh\n");
     }
+
+    public static String timeAndPrice(int position, int price){
+
+        String formattedI = (position < 10) ? "0" + (position) : String.valueOf(position);
+        String formattedNextI = ((position + 1) < 10) ? "0" + (position + 1) : String.valueOf(position + 1);
+
+        return formattedI + "-" + formattedNextI + ", " + price;
+    }
+
     public static void sortArray (int [] input) {
         Integer[] integerArray = new Integer[input.length]; // Create an array of Integer objects with the same length
 
@@ -94,15 +108,20 @@ public class App {
         }
     }
 
-    public static void bestTime (int [] input) {
+    public static void bestTimeToCharge (int [] input) {
+        float val1 = 0;
+        float val2 = 0;
+        int time = 0;
+        for (int i = 0; i < input.length -4; i++){
+            val1 = input [i] + input [i+1] + input [i+2] + input [i+3];
+            if (val2 < val1);
+                val2 = val1;
+                time = i;
+        }
+        System.out.printf("Påbörja laddning klockan " + time +"\n" +
+                "Medelpris 4h: " +String.format(swedishLocale,"%.1f", val2 /4) + " öre/kWh\n");
         //find the 4 cheapets consecutive hours in a row for 24 hours, the program should tell when
         //u should start charge the car to
-
-
-          // 01 -05 == 50
-        //02- 06 ==
-
-
     }
 
 }

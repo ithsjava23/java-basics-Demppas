@@ -62,7 +62,7 @@ private static Locale swedishLocale = new Locale("sv", "SE");
         String min2 ="";
         String max2 ="";
 
-        for (int i = 0; i < input.length; i++){         //calculate avg, min and max value
+        for (int i = 0; i < input.length; i++){
             int val = input [i];
             sum += val;
             if (i == 0 || val < min) {
@@ -95,7 +95,7 @@ private static Locale swedishLocale = new Locale("sv", "SE");
         for (int i = 0; i < input.length; i++) {
             timePrices[i] = new TimeAndPrice (i, input[i]); // Convert each int to Integer
         }
-        Arrays.sort(timePrices, Comparator.comparingInt(TimeAndPrice::getPrice).reversed());
+        Arrays.sort(timePrices, Comparator.comparingInt(TimeAndPrice::getPrice).reversed()); // Compare and sorts(reversed) the arrays
 
         for (int i = 0; i < timePrices.length; i++) {
             TimeAndPrice t = timePrices [i];
@@ -119,8 +119,6 @@ private static Locale swedishLocale = new Locale("sv", "SE");
         }
         System.out.printf("Påbörja laddning klockan " + time +"\n" +
                 "Medelpris 4h: " +String.format(swedishLocale,"%.1f", val2 /4) + " öre/kWh\n");
-        //find the 4 cheapets consecutive hours in a row for 24 hours, the program should tell when
-        //u should start charge the car to
     }
 static class TimeAndPrice{
         private int time;
